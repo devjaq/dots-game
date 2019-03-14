@@ -1,5 +1,82 @@
-#counter {
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: sans-serif;
+}
+#top-display {
+  width: 100vw;
+  height: 160px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   position: absolute;
+  top: 0;
+  left: 0;
+  padding: 7px 20px;
+  /* background: pink; */
+}
+
+#info {
+  width: 75%;
+}
+
+#counter-box {
+  /* width: 100px;
+  height: 100px; */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* position: absolute;
   top: 10px;
-  right: 10px;
+  right: 10px; */
+  border: 7px solid dimgray;
+  border-radius: 15px;
+  padding: 7px 7px;
+  background-color: whitesmoke;
+  box-shadow: -1px 1px 10px 0 black;
+}
+
+.counter {
+  font-size: 3rem;
+  padding: 0 7px;
+}
+
+#greyCounter {
+  color: grey;
+}
+
+#blueCounter {
+  color: blue;
+}
+
+#redCounter { 
+  color: red;
+}
+
+#control-area {
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  background: whitesmoke;
+}
+
+button {
+  box-sizing: content-box;
+  width: 75px;
+  height: 75px; 
+  margin: 7px;
+  border: 2px solid fuchsia;
+  border-right: 4px solid fuchsia;
+  border-bottom: 6px solid fuchsia;
+  border-radius: 5%;
+  padding: 0;
+}
+
+button:hover {
+  border: 2px solid fuchsia;
+  margin: 11px 9px 7px 7px;
+  /* padding: 4px 2px 0 0 ; */
 }

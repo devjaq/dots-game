@@ -1,16 +1,20 @@
 var myGamePiece;
-let object;
-let counter;
+let greyObject;
+let blueObject;
+let redObject;
+let greyCounter;
+let rewardButton;
+let upgradeNumber = 2;
 let screenWidth = window.innerWidth;
-let screenHeight = window.innerHeight;
+let screenHeight = window.innerHeight * .8;
 
 function randomX() {
-  let x = Math.floor(Math.random() * (screenWidth - 0));
+  let x = Math.floor(Math.random() * (screenWidth - 50));
   return x;
 }
 
 function randomY() {
-  let y = Math.floor(Math.random() * (screenHeight - 0));
+  let y = Math.floor(Math.random() * (screenHeight - 200) + 200);
   return y;
 }
 
@@ -43,19 +47,59 @@ var myGameArea = {
   }
 };
 
+///// CREATE NON-CANVAS DISPLAY ELEMENTS /////
 
-counter = document.createElement("div");
-document.body.appendChild(counter);
-counter.setAttribute('id', 'counter');
-counter.innerHTML = `Hi!`;
-console.log(counter.outerHTML);
+const controlArea = document.createElement("section");
+controlArea.setAttribute('id', 'control-area');
+document.body.appendChild(controlArea);
 
+const topDisplay = document.createElement("section");
+topDisplay.setAttribute('id', 'top-display');
+document.body.appendChild(topDisplay);
+
+let info = document.createElement("p");
+info.setAttribute('id', 'info');
+info.innerText = "Use the arrow keys or WASD keys to move the rectangle and collect the squares!";
+topDisplay.appendChild(info);
+
+///// START COUNTERS /////
+
+let counterBox = document.createElement("section");
+counterBox.setAttribute('id', 'counter-box');
+topDisplay.appendChild(counterBox);
+
+greyCounter = document.createElement("div");
+counterBox.appendChild(greyCounter);
+greyCounter.setAttribute('id', 'greyCounter');
+greyCounter.classList.add("counter");
+greyCounter.innerHTML = `Hi!`;
+console.log(greyCounter.outerHTML);
+
+blueCounter = document.createElement("div");
+counterBox.appendChild(blueCounter);
+blueCounter.setAttribute('id', 'blueCounter');
+blueCounter.classList.add("counter");
+blueCounter.innerHTML = `Hi!`;
+console.log(blueCounter.outerHTML);
+
+redCounter = document.createElement("div");
+counterBox.appendChild(redCounter);
+redCounter.setAttribute('id', 'redCounter');
+redCounter.classList.add("counter");
+redCounter.innerHTML = `Hi!`;
+console.log(redCounter.outerHTML);
+
+///// END COUNTERS /////
 
 function startGame() {
-  console.log(counter);
-  counter.innerHTML = 0;
+  console.log(greyCounter);
+  greyCounter.innerHTML = 0;
+  blueCounter.innerHTML = 0;
+  redCounter.innerHTML = 0;
   myGamePiece = new component(30, 70, "red", 225, 225);
-  object = new component(10, 10, "gray", randomX(), randomY());
+  greyObject = new component(10, 10, "gray", randomX(), randomY());
+  blueObject = new component(10, 10, "blue", randomX(), randomY());
+  redObject = new component(10, 10, "red", randomX(), randomY());
   myGameArea.start();
 }
 
@@ -109,17 +153,55 @@ function component(width, height, color, x, y, type) {
   };
 }
 
+function upgrade(){
+  console.log("upgrade!");
+  // subtract upgrade number from totals
+  greyCounter.innerHTML = Number(greyCounter.innerHTML) - upgradeNumber;
+  blueCounter.innerHTML = Number(blueCounter.innerHTML) - upgradeNumber;
+  redCounter.innerHTML = Number(redCounter.innerHTML) - upgradeNumber;
+  // if any counter is less that upgrade value, disable button
+  if (Number(greyCounter.innerHTML) < upgradeNumber || Number(blueCounter.innerHTML) < upgradeNumber || Number(redCounter.innerHTML) < upgradeNumber) {
+    rewardButton.setAttribute('disabled', "");
+  }
+}
+
 function updateGameArea() {
-  if (myGamePiece.contact(object)) {
-    object = new component(10, 10, "gray", randomX(), randomY());
-    counter.innerHTML = Number(counter.innerHTML) + 1;
-    console.log(counter);
-    
+  function fifteen() {
+    if (Number(greyCounter.innerHTML) >= upgradeNumber && Number(blueCounter.innerHTML) >= upgradeNumber && Number(redCounter.innerHTML) >= upgradeNumber) {
+      console.log("Goal Reached!!");
+      // check if button exists, else create
+      if (document.getElementById('reward-button')) {
+        // console.log("button already exists");
+        rewardButton.removeAttribute('disabled');
+      } else {
+        rewardButton = document.createElement('button');
+        rewardButton.setAttribute('id', 'reward-button');
+        rewardButton.setAttribute('onclick', 'upgrade()')
+        rewardButton.innerText = "Upgrade!";
+        controlArea.appendChild(rewardButton);
+      }
+    }
+  }
+  if (myGamePiece.contact(greyObject)) {
+    greyObject = new component(10, 10, "gray", randomX(), randomY());
+    greyCounter.innerHTML = Number(greyCounter.innerHTML) + 1;
+    fifteen();
+    // console.log(greyCounter);
+  } else if (myGamePiece.contact(blueObject)) {
+    blueObject = new component(10, 10, "blue", randomX(), randomY());
+    blueCounter.innerHTML = Number(blueCounter.innerHTML) + 1;
+    fifteen();
+    // console.log(blueCounter);
+  } else if (myGamePiece.contact(redObject)) {
+    redObject = new component(10, 10, "red", randomX(), randomY());
+    redCounter.innerHTML = Number(redCounter.innerHTML) + 1;
+    fifteen();
+    // console.log(redCounter);
   } else {
     myGameArea.clear();
     myGamePiece.moveAngle = 0;
     myGamePiece.speed = 0;
-
+    ///// START KEYBOARD CONTROLS /////
     // 37-39 = arrow keys, others are WASD
     // move left
     if (
@@ -176,8 +258,11 @@ function updateGameArea() {
       ) {
         (myGamePiece.speed = 10), (myGamePiece.angle = 135);
       }
+      ///// END KEYBOARD CONTROLS /////
     }
-    object.update();
+    greyObject.update();
+    blueObject.update();
+    redObject.update();
     myGamePiece.newPos();
     myGamePiece.update();
   }
