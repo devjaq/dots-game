@@ -1,0 +1,75 @@
+* {
+  box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: #EAEBF0;
+  font-family: sans-serif; }
+
+#top-display {
+  width: 100vw;
+  height: 160px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 7px 20px;
+  /* background: pink; */ }
+
+#info {
+  width: 75%; }
+
+#counter-box {
+  /* width: 100px;
+  height: 100px; */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 7px solid #ca3b5a;
+  border-radius: 15px;
+  padding: 7px 7px;
+  background-color: whitesmoke;
+  box-shadow: -1px 1px 10px 0 black; }
+
+.counter {
+  font-size: 3rem;
+  padding: 0 7px; }
+
+#greyCounter {
+  color: grey; }
+
+#blueCounter {
+  color: #21295C; }
+
+#redCounter {
+  color: red; }
+
+#control-area {
+  width: 100vw;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  background: #065A82; }
+
+button {
+  box-sizing: content-box;
+  width: 75px;
+  height: 75px;
+  margin: 7px;
+  border: 2px solid #ca3b5a;
+  border-right: 4px solid #ca3b5a;
+  border-bottom: 6px solid #ca3b5a;
+  border-radius: 15%;
+  padding: 0; }
+
+button:hover {
+  border: 2px solid #ca3b5a;
+  margin: 11px 9px 7px 7px;
+  /* padding: 4px 2px 0 0 ; */ }
+
+/*# sourceMappingURL=style.css.map */

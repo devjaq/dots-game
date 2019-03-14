@@ -5,16 +5,41 @@ let redObject;
 let greyCounter;
 let rewardButton;
 let upgradeNumber = 2;
+let controlArea;
+
+let x, y;
+
+///// CREATE NON-CANVAS DISPLAY ELEMENTS /////
+
+const topDisplay = document.createElement("section");
+topDisplay.setAttribute('id', 'top-display');
+document.body.appendChild(topDisplay);
+
+let info = document.createElement("p");
+info.setAttribute('id', 'info');
+info.innerText = "Use the arrow keys or WASD keys to move the rectangle and collect the squares!";
+topDisplay.appendChild(info);
+
+controlArea = document.createElement("section");
+controlArea.setAttribute('id', 'control-area');
+document.body.appendChild(controlArea);
+
 let screenWidth = window.innerWidth;
-let screenHeight = window.innerHeight * .8;
+let screenHeight = window.innerHeight - controlArea.clientHeight;
 
 function randomX() {
-  let x = Math.floor(Math.random() * (screenWidth - 50));
+  x = Math.floor(Math.random() * (screenWidth - 50));
   return x;
 }
 
 function randomY() {
-  let y = Math.floor(Math.random() * (screenHeight - 200) + 200);
+  controlArea = document.getElementById('control-area');
+  // console.log(controlArea.clientHeight);
+  if (controlArea.clientHeight) {
+    y = Math.floor(Math.random() * (screenHeight - controlArea.clientHeight) + controlArea.clientHeight);
+  } else {
+    y = Math.floor(Math.random() * (screenHeight));
+  }
   return y;
 }
 
@@ -47,21 +72,6 @@ var myGameArea = {
   }
 };
 
-///// CREATE NON-CANVAS DISPLAY ELEMENTS /////
-
-const controlArea = document.createElement("section");
-controlArea.setAttribute('id', 'control-area');
-document.body.appendChild(controlArea);
-
-const topDisplay = document.createElement("section");
-topDisplay.setAttribute('id', 'top-display');
-document.body.appendChild(topDisplay);
-
-let info = document.createElement("p");
-info.setAttribute('id', 'info');
-info.innerText = "Use the arrow keys or WASD keys to move the rectangle and collect the squares!";
-topDisplay.appendChild(info);
-
 ///// START COUNTERS /////
 
 let counterBox = document.createElement("section");
@@ -73,32 +83,34 @@ counterBox.appendChild(greyCounter);
 greyCounter.setAttribute('id', 'greyCounter');
 greyCounter.classList.add("counter");
 greyCounter.innerHTML = `Hi!`;
-console.log(greyCounter.outerHTML);
 
 blueCounter = document.createElement("div");
 counterBox.appendChild(blueCounter);
 blueCounter.setAttribute('id', 'blueCounter');
 blueCounter.classList.add("counter");
 blueCounter.innerHTML = `Hi!`;
-console.log(blueCounter.outerHTML);
 
 redCounter = document.createElement("div");
 counterBox.appendChild(redCounter);
 redCounter.setAttribute('id', 'redCounter');
 redCounter.classList.add("counter");
 redCounter.innerHTML = `Hi!`;
-console.log(redCounter.outerHTML);
 
 ///// END COUNTERS /////
+console.log(myGameArea.canvas.width);
+console.log(myGameArea.canvas.hasAttribute("width"));
+
+
+console.log(myGameArea.canvas.attributes);
+
 
 function startGame() {
-  console.log(greyCounter);
   greyCounter.innerHTML = 0;
   blueCounter.innerHTML = 0;
   redCounter.innerHTML = 0;
   myGamePiece = new component(30, 70, "red", 225, 225);
   greyObject = new component(10, 10, "gray", randomX(), randomY());
-  blueObject = new component(10, 10, "blue", randomX(), randomY());
+  blueObject = new component(10, 10, "$deep-blue", randomX(), randomY());
   redObject = new component(10, 10, "red", randomX(), randomY());
   myGameArea.start();
 }
@@ -140,12 +152,16 @@ function component(width, height, color, x, y, type) {
     let otherRight = otherThing.x + otherThing.width;
     let otherTop = otherThing.y;
     let otherBottom = otherThing.y + otherThing.height;
+    let wallTop = 0;
+    let wallRight = screenWidth;
+    let wallBottom = screenHeight;
+    let wallLeft = 0;
     let contact = true;
     if (
-      myBottom < otherTop ||
+      myBottom < otherTop || 
       myTop > otherBottom ||
       myRight < otherLeft ||
-      myLeft > otherRight
+      myLeft > otherRight || myTop < wallTop || myBottom > wallBottom
     ) {
       contact = false;
     }
@@ -168,10 +184,8 @@ function upgrade(){
 function updateGameArea() {
   function fifteen() {
     if (Number(greyCounter.innerHTML) >= upgradeNumber && Number(blueCounter.innerHTML) >= upgradeNumber && Number(redCounter.innerHTML) >= upgradeNumber) {
-      console.log("Goal Reached!!");
       // check if button exists, else create
       if (document.getElementById('reward-button')) {
-        // console.log("button already exists");
         rewardButton.removeAttribute('disabled');
       } else {
         rewardButton = document.createElement('button');
@@ -186,18 +200,30 @@ function updateGameArea() {
     greyObject = new component(10, 10, "gray", randomX(), randomY());
     greyCounter.innerHTML = Number(greyCounter.innerHTML) + 1;
     fifteen();
-    // console.log(greyCounter);
   } else if (myGamePiece.contact(blueObject)) {
     blueObject = new component(10, 10, "blue", randomX(), randomY());
     blueCounter.innerHTML = Number(blueCounter.innerHTML) + 1;
     fifteen();
-    // console.log(blueCounter);
   } else if (myGamePiece.contact(redObject)) {
     redObject = new component(10, 10, "red", randomX(), randomY());
     redCounter.innerHTML = Number(redCounter.innerHTML) + 1;
     fifteen();
-    // console.log(redCounter);
+  } else if (myGamePiece.x < 0) {
+    myGamePiece.speed = 0;
+    myGamePiece.x += 1;
+  } else if (myGamePiece.x > myGameArea.canvas.clientWidth) {
+    myGamePiece.speed = 0;
+    myGamePiece.x -= 1;
+  } else if (myGamePiece.y < 0) {
+    myGamePiece.speed = 0;
+    myGamePiece.y += 1;
+  } else if (myGamePiece.y > myGameArea.canvas.clientHeight) {
+    myGamePiece.speed = 0;
+    myGamePiece.y -= 1;
   } else {
+    // console.log(myGamePiece.x, myGamePiece.y);
+    // console.log(myGameArea.canvas.clientHeight);
+    
     myGameArea.clear();
     myGamePiece.moveAngle = 0;
     myGamePiece.speed = 0;

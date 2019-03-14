@@ -1,0 +1,98 @@
+$dark-purple: rgb(50, 0, 50);
+$alt-bg: rgb(214, 203, 214);
+$md-blue: hsl(195, 40%, 75%);
+$lt-blue: hsl(195, 100%, 97%);
+$white-ish: rgb(245, 235, 250);
+$white-ish: #f3f2ff;
+$pink: #e9afda;
+$bright-berry: rgb(202, 59, 90);
+$fuscia: rgb(165, 25, 130);
+$purple: rgb(172, 57, 230);
+$deep-blue: #21295C;
+$bg-blue: #EAEBF0;
+$blue-sapphire: #065A82;
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: $bg-blue;
+  font-family: sans-serif;
+}
+#top-display {
+  width: 100vw;
+  height: 160px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 7px 20px;
+  /* background: pink; */
+}
+
+#info {
+  width: 75%;
+}
+
+#counter-box {
+  /* width: 100px;
+  height: 100px; */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 7px solid $bright-berry;
+  border-radius: 15px;
+  padding: 7px 7px;
+  background-color: whitesmoke;
+  box-shadow: -1px 1px 10px 0 black;
+}
+
+.counter {
+  font-size: 3rem;
+  padding: 0 7px;
+}
+
+#greyCounter {
+  color: grey;
+}
+
+#blueCounter {
+  color: $deep-blue;
+}
+
+#redCounter { 
+  color: red;
+}
+
+#control-area {
+  width: 100vw;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  background: $blue-sapphire;
+}
+
+button {
+  box-sizing: content-box;
+  width: 75px;
+  height: 75px; 
+  margin: 7px;
+  border: 2px solid $bright-berry;
+  border-right: 4px solid $bright-berry;
+  border-bottom: 6px solid $bright-berry;
+  border-radius: 15%;
+  padding: 0;
+}
+
+button:hover {
+  border: 2px solid $bright-berry;
+  margin: 11px 9px 7px 7px;
+  /* padding: 4px 2px 0 0 ; */
+}
